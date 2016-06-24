@@ -13,11 +13,11 @@ class BoardsController < ApplicationController
   end
 
   def update
-  	board = Board.find(params[:id]);
-  	if board.update(board_params)
-  		render json: board
+  	@board = Board.find(params[:id]);
+  	if @board.update(board_params)
+  		render json: @board
   	else
-  		render json: { errors: board.errors.full_messages }
+  		render json: { errors: @board.errors.full_messages }
   	end
   end
 

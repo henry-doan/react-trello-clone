@@ -1,14 +1,9 @@
 class List extends React.Component {
     constructor(props) {
      	super(props);
-     	this.state = { items: [], edit: false };
+     	this.state = { items: props.items, edit: false };
       this.toggleEdit = this.toggleEdit.bind(this);
     	this.updateList = this.updateList.bind(this);
-    }
-
-    componentWillMount() {
-        // TODO make and ajax call to grab all the lists items
-        // on success - set state on all the items
     }
 
    	toggleEdit() {
@@ -18,7 +13,7 @@ class List extends React.Component {
   	updateList(){
   		let list= { name: this.refs.name.value }
   		this.toggleEdit();
-  		this.props.updatelist(this.props.id, list);
+  		this.props.updateList(this.props.id, list);
   	}
 
   	edit() {
@@ -33,21 +28,22 @@ class List extends React.Component {
   	}
 
     render() {
-    	let items = this.state.items.map( item => {
-    		// this should be a new compmonent
-    		return(<h3>{item.name}</h3>);
-    	});
 
     	if (this.state.edit)
       	return this.edit();
    		else
         return(
-        	<div>
-        		<h3>{this.props.name}</h3>
-        		<button onClick={this.toggleEdit} className='btn'>Edit</button>
-        		<button className='btn red' onClick={() => this.props.deleteList(this.props.id)}>Delete</button>
-        		<hr />
-        		{items}
+        	 <div>
+        	  <div className="col s12 m6">
+        	    <div className="card black darken-1">
+        	      <div className="card-content white-text" onClick={() => this.props.showList(this.props)}>
+        	        <span className="card-title">{this.props.name}</span>
+        	      </div>
+        	      <div className="card-action">
+        	        <button onClick={this.toggleEdit} className='btn'>Edit</button>
+									<button className='btn red' onClick={() => this.props.deleteList(this.props.id)}>Delete</button>        	      </div>
+        	    </div>
+        	  </div>
         	</div>
        );
     }

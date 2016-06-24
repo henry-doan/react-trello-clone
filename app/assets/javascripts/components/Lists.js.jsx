@@ -1,9 +1,11 @@
 class Lists extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { lists: [] };
+		this.state = { lists: [], show: false };
 		this.deleteList = this.deleteList.bind(this);
 		this.updateList = this.updateList.bind(this);
+		this.showList = this.showList.bind(this);
+    this.listBack = this.listBack.bind(this);
 	}
 
 	componentWillMount() {
@@ -20,12 +22,12 @@ class Lists extends React.Component {
 
 	updateList(id, list) {
 		$.ajax({
-			url: `/boards/${this.props.boardId}/${id}`,
+			url: `/boards/${this.props.boardId}/lists/${id}`,
 			type: 'PUT',
 			dataType: 'JSON',
 			data: { list: {...list} }
 		}).done( list => {
-			let lists = this.stat.lists;
+			let lists = this.state.lists;
 			let editList = lists.find( b => b.id === list.id);
 			editList.name =list.name;
 			this.setState({lists: lists});
@@ -67,18 +69,41 @@ class Lists extends React.Component {
 		});
 	}
 
+	showList(list) {
+    this.setState({ show: true, list})
+  }
+
+  listBack() {
+    this.setState({ show: false })
+  }
+
+
 	render() {
 		let lists = this.state.lists.map( list => {
-			return(<List key={`list-${list.id}`} {...list} deleteList={this.deleteList} updateList={this.updateList}/>);
+					return(<List key={`list-${list.id}`} {...list} deleteList={this.deleteList} updateList={this.updateList} showList={this.showList}/>);
 		});
-		return(
-			<div>
-			  <form onSubmit={this.addList.bind(this)} ref='addList'>
-			    <input type='text' ref='name' placeholder='List Name' required />
-			    <input type='submit' className='btn' value='Add' />
-			  </form>
-			  {lists}
-			</div>
-		);
-	}
-}
+
+		if(this.state.show) {
+			let list = this.state.list;
+			return(
+				<div>
+				//     ?
+					<h2>list.name</h2>
+					<hr />
+					<button className='btn' onClick={this.listBack.bind(this)}>Back To All List</button>
+					<Items listId={this.state.list.id} />
+				</div>
+			)
+		} else {
+				return(
+					<div>
+						<NewList boardId={this.props.boardId} addList={this.addList.bind(this)}/>
+						<br />
+						<div className="row">
+						  {lists}
+						</div>
+					</div>
+				);
+		} //else
+	} //render
+} //class

@@ -1,7 +1,7 @@
 class Boards extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {boards: props.boards, show: false};
+		this.state = {boards: this.props.boards, show: false};
 		this.deleteBoard = this.deleteBoard.bind(this);
 		this.showBoard = this.showBoard.bind(this);
     this.updateBoard = this.updateBoard.bind(this);
